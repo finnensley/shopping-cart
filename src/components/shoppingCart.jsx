@@ -45,21 +45,6 @@ const ShoppingCart = () => {
     );
   };
 
-  const handleDecrease = (cartItem) => {
-    if (cartItem.quantity === 1) return; // Prevents going below 1
-    setCartItems((prevCartItems) =>
-      prevCartItems.map((ci) =>
-        ci.id === cartItem.id ? { ...ci, quantity: ci.quantity - 1 } : ci
-      )
-    );
-
-    setItems((prevItems) =>
-      prevItems.map((it) =>
-        it.id === cartItem.id ? { ...it, quantity: it.quantity + 1 } : it
-      )
-    );
-  };
-
   const handleDelete = (cartItem) => {
     setCartItems((prevCartItems) =>
       prevCartItems.filter((ci) => ci.id !== cartItem.id)
@@ -72,6 +57,24 @@ const ShoppingCart = () => {
       )
     );
   };
+
+  const handleDecrease = (cartItem) => {
+    if (cartItem.quantity === 1) { // handleDelete happens after click past 1
+        handleDelete(cartItem);
+    } else {
+    setCartItems((prevCartItems) =>
+      prevCartItems.map((ci) =>
+        ci.id === cartItem.id ? { ...ci, quantity: ci.quantity - 1 } : ci
+      )
+    );
+
+    setItems((prevItems) =>
+      prevItems.map((it) =>
+        it.id === cartItem.id ? { ...it, quantity: it.quantity + 1 } : it
+      )
+    );
+  };
+};
 
   return (
     <div>
@@ -121,15 +124,15 @@ const ShoppingCart = () => {
                     onClick={() => handleIncrease(cartItem)}
                     disabled={stock === 0}
                   >
-                    ↑
+                    +
                   </button>
                   <button
                     // style={{ marginLeft: "8px" }}
                     className="ml-2 w-12 text-3xl"
                     onClick={() => handleDecrease(cartItem)}
-                    disabled={cartItem.quantity === 1}
+                    disabled={cartItem.quantity === 0}
                   >
-                    ↓
+                    -
                   </button>
                   </span>
                   <button
