@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const initialItems = [
   { id: 1, name: "T-shirt", price: 3, quantity: 2 },
@@ -8,8 +8,21 @@ const initialItems = [
 ];
 
 const ShoppingCart = () => {
-  const [items, setItems] = useState(initialItems);
-  const [cartItems, setCartItems] = useState([]);
+  const [items, setItems] = useState(() => {
+    const storedItems = localStorage.getItem("items");
+    return storedItems ? JSON.parse(storedItems) : initialItems;
+  });
+  const [cartItems, setCartItems] = useState(() => {
+     const storedCart = localStorage.getItem("cartItems");
+     return storedCart ? JSON.parse(storedCart) : [];
+  });
+
+  // saves inventory items and  cart items to localStorage
+  useEffect(() => {
+    localStorage.setItem("items", JSON.stringify(items));
+    localStorage.setItem("cartItems", JSON.stringify(cartItems));
+  }, [items, cartItems]);
+
 
   const handleAddToCart = (item) => {
     if (item.quantity === 0) return;
@@ -59,29 +72,33 @@ const ShoppingCart = () => {
   };
 
   const handleDecrease = (cartItem) => {
-    if (cartItem.quantity === 1) { // handleDelete happens after click past 1
-        handleDelete(cartItem);
+    if (cartItem.quantity === 1) {
+      // handleDelete happens after click past 1
+      handleDelete(cartItem);
     } else {
-    setCartItems((prevCartItems) =>
-      prevCartItems.map((ci) =>
-        ci.id === cartItem.id ? { ...ci, quantity: ci.quantity - 1 } : ci
-      )
-    );
+      setCartItems((prevCartItems) =>
+        prevCartItems.map((ci) =>
+          ci.id === cartItem.id ? { ...ci, quantity: ci.quantity - 1 } : ci
+        )
+      );
 
-    setItems((prevItems) =>
-      prevItems.map((it) =>
-        it.id === cartItem.id ? { ...it, quantity: it.quantity + 1 } : it
-      )
-    );
+      setItems((prevItems) =>
+        prevItems.map((it) =>
+          it.id === cartItem.id ? { ...it, quantity: it.quantity + 1 } : it
+        )
+      );
+    }
   };
-};
 
   return (
     <div>
       <div
-    //   style ={{ backgroundColor: "rgb(80, 56, 56)" }}
-      style ={{ backgroundColor: "slategrey" }}
-      className="flex rounded-4xl justify-center item-center border-2 border-white shadow-2xl shadow-black-950 gap-4"> {/*bg-blue-900*/}
+        //   style ={{ backgroundColor: "rgb(80, 56, 56)" }}
+        style={{ backgroundColor: "slategrey" }}
+        className="flex rounded-4xl justify-center item-center border-2 border-white shadow-2xl shadow-black-950 gap-4"
+      >
+        {" "}
+        {/*bg-blue-900*/}
         {/*center div inside a div, justify-center item-center on outer div*/}
         <div className="flex flex-col justify-evenly ml-5 mt-15 mb-15 bg-blue-200 shadow-2xl shadow-black-950 drop-shadow-lg p-10 rounded-4xl w-xl">
           <h2 className="flex justify-center mb-5 text-3xl">Inventory Items</h2>
@@ -119,21 +136,21 @@ const ShoppingCart = () => {
                     {cartItem.name} : ${cartItem.price} x {cartItem.quantity}
                   </span>
                   <span className="inline-flex items-center ml-2">
-                  <button
-                    className="ml-35 w-12 text-3xl"
-                    onClick={() => handleIncrease(cartItem)}
-                    disabled={stock === 0}
-                  >
-                    +
-                  </button>
-                  <button
-                    // style={{ marginLeft: "8px" }}
-                    className="ml-2 w-12 text-3xl"
-                    onClick={() => handleDecrease(cartItem)}
-                    disabled={cartItem.quantity === 0}
-                  >
-                    -
-                  </button>
+                    <button
+                      className="ml-35 w-12 text-3xl"
+                      onClick={() => handleIncrease(cartItem)}
+                      disabled={stock === 0}
+                    >
+                      +
+                    </button>
+                    <button
+                      // style={{ marginLeft: "8px" }}
+                      className="ml-2 w-12 text-3xl"
+                      onClick={() => handleDecrease(cartItem)}
+                      disabled={cartItem.quantity === 0}
+                    >
+                      -
+                    </button>
                   </span>
                   <button
                     className="ml-2 w-full"
