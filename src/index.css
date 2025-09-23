@@ -1,9 +1,13 @@
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
+  margin: 20px;
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  /* color: rgba(255, 255, 255, 0.87); */
+  color: #242424;
+  /* background-color: #242424; */
+  /* background-color: rgba(80, 56, 56, 0.858); */
+  background-color: rgba(80, 56, 56, 0.823);
+
 }
