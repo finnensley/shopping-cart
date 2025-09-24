@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const initialItems = [
   { id: 1, name: "T-shirt", price: 3, quantity: 2 },
@@ -7,14 +8,17 @@ const initialItems = [
   { id: 4, name: "Jacket", price: 5, quantity: 0 },
 ];
 
+
+
 const ShoppingCart = () => {
+  const navigate = useNavigate();
   const [items, setItems] = useState(() => {
     const storedItems = localStorage.getItem("items");
     return storedItems ? JSON.parse(storedItems) : initialItems;
   });
   const [cartItems, setCartItems] = useState(() => {
-     const storedCart = localStorage.getItem("cartItems");
-     return storedCart ? JSON.parse(storedCart) : [];
+    const storedCart = localStorage.getItem("cartItems");
+    return storedCart ? JSON.parse(storedCart) : [];
   });
 
   // saves inventory items and  cart items to localStorage
@@ -22,7 +26,6 @@ const ShoppingCart = () => {
     localStorage.setItem("items", JSON.stringify(items));
     localStorage.setItem("cartItems", JSON.stringify(cartItems));
   }, [items, cartItems]);
-
 
   const handleAddToCart = (item) => {
     if (item.quantity === 0) return;
@@ -89,6 +92,7 @@ const ShoppingCart = () => {
       );
     }
   };
+
 
   return (
     <div>
@@ -176,7 +180,7 @@ const ShoppingCart = () => {
               <hr></hr>
               <p className="p-5 text-2xl">Shipping: </p>
               <hr></hr>
-              <button className="p-5 w-full" type="submit">
+              <button onClick={() => navigate("/checkout")} className="p-5 w-full" type="submit">
                 Check Out
               </button>
             </div>
