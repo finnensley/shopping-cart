@@ -167,18 +167,15 @@ const ShoppingCart = () => {
               );
             })}
             <div>
-              <p className="p-5 text-2xl">
-                SubTotal: $
+              <p className="p-5 text-3xl text-center">
+                Total: $
                 {
                   cartItems
                     .map((cartItem) => cartItem.quantity * cartItem.price)
                     .reduce((acc, itemTotal) => acc + itemTotal, 0) // itemTotal could be amt, can be anything
                 }
               </p>
-              <hr></hr>
-              <p className="p-5 text-2xl">Taxes: </p>
-              <hr></hr>
-              <p className="p-5 text-2xl">Shipping: </p>
+              <span className="text-center">*excludes taxes and shipping</span>
               <hr></hr>
               <button onClick={() => navigate("/checkout")} className="p-5 w-full" type="submit">
                 Check Out
